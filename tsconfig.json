@@ -24,7 +24,11 @@
     ],
     "baseUrl": "src",
     "paths": {
-      "@env/*": ["environments/*"]
+      "@env/*": ["environments/*"],
+      "@models/*": ["app/models/*"],
+      "@services/*": ["app/services/*"],
+      "@apis/*": ["app/apis/*"],
+      "@shared/*": ["app/shared/*"]
     }
   },
   "angularCompilerOptions": {
