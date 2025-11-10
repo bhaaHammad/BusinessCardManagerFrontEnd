@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { HttpService } from '@services/http.service';
 import { BusinessCard } from '@models/business-card.model';
 import { BusinessCardFilters } from '@models/business-card-filters.model';
-import { CreateBusinessCardRequest } from '@models/dtos/create-business-card.model';
+import { CreateBusinessCardRequest } from '@models/dtos/create-business-card.dto';
 
 @Injectable({
   providedIn: 'root',
@@ -34,6 +34,31 @@ export class CardsApiService {
 
   export(format: 'csv' | 'xml'): Observable<Blob> {
     return this.http.post<Blob>(`${this.basePath}/export?format=${format}`, {});
+  }
+
+  previewCsv(file: File): Observable<{
+    cards: CreateBusinessCardRequest[];
+    errors: string[];
+    totalRows: number;
+    validRows: number;
+    invalidRows: number;
+  }> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.postFormData<{
+      cards: CreateBusinessCardRequest[];
+      errors: string[];
+      totalRows: number;
+      validRows: number;
+      invalidRows: number;
+    }>(`${this.basePath}/import/csv/preview`, formData);
+  }
+
+  commitImport(cards: CreateBusinessCardRequest[]): Observable<{ message: string; importedCount: number }> {
+    return this.http.post<{ message: string; importedCount: number }>(
+      `${this.basePath}/import/csv/commit`,
+      { cards }
+    );
   }
 }
 

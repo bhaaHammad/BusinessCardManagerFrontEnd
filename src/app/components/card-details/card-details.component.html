@@ -1,0 +1,71 @@
+<div *ngIf="card()" class="card-details">
+    <mat-card>
+      <mat-card-header>
+        <div class="header-actions">
+          <button mat-icon-button [routerLink]="['/cards']" aria-label="Back to list">
+            <mat-icon>arrow_back</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            (click)="copyToClipboard()"
+            [attr.aria-label]="'Copy card details to clipboard'">
+            <mat-icon>content_copy</mat-icon>
+          </button>
+        </div>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="card-content">
+          <div class="avatar-section">
+            <img [src]="getPhotoUrl()" [alt]="card()!.name + ' photo'" class="large-avatar" />
+            <h1>{{ card()!.name }}</h1>
+          </div>
+
+          <div class="details-grid">
+            <div class="detail-item">
+              <mat-icon [matTooltip]="card()!.gender">{{ card()!.gender }}</mat-icon>
+              <span>{{ card()!.gender }}</span>
+            </div>
+
+            <div class="detail-item">
+              <mat-icon>cake</mat-icon>
+              <span>{{ formatDate(card()!.dateOfBirth) }}</span>
+            </div>
+
+            <div class="detail-item">
+              <mat-icon>email</mat-icon>
+              <a [href]="'mailto:' + card()!.email">{{ card()!.email }}</a>
+            </div>
+
+            <div class="detail-item">
+              <mat-icon>phone</mat-icon>
+              <a [href]="'tel:' + card()!.phone">{{ card()!.phone }}</a>
+            </div>
+
+            <div class="detail-item full-width">
+              <mat-icon>location_on</mat-icon>
+              <span>{{ card()!.address }}</span>
+            </div>
+          </div>
+
+          <div class="qr-section" *ngIf="showQr()">
+            <h3>QR Code Data</h3>
+            <pre class="qr-data">{{ getQrData() }}</pre>
+          </div>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions>
+        <button mat-button (click)="toggleQr()">
+          <mat-icon>{{ showQr() ? 'visibility_off' : 'qr_code' }}</mat-icon>
+          {{ showQr() ? 'Hide QR' : 'Show QR' }}
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+  <div *ngIf="!card() && !loading" class="not-found">
+    <mat-icon>error_outline</mat-icon>
+    <p>Business card not found</p>
+    <button mat-raised-button [routerLink]="['/cards']">Back to List</button>
+  </div>

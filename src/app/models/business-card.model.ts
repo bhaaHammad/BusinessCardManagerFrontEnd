@@ -4,11 +4,9 @@ export interface BusinessCard {
   id: string;
   name: string;
   gender: Gender;
-  dateOfBirth: string; // ISO string (yyyy-MM-dd)
+  dateOfBirth: string;
   email: string;
   phone: string;
   address: string;
-  photoBase64?: string; // <= 1MB base64 payload
+  photoBase64?: string;
 }
-
-

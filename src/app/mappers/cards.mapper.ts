@@ -1,5 +1,5 @@
 import { BusinessCard } from '@models/business-card.model';
-import { CreateBusinessCardRequest } from '@models/dtos/create-business-card.model';
+import { CreateBusinessCardRequest } from '@models/dtos/create-business-card.dto';
 
 export function mapToCreateRequest(card: Partial<BusinessCard>): CreateBusinessCardRequest {
   return {

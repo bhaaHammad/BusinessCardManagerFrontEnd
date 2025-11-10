@@ -25,10 +25,18 @@
     "baseUrl": "src",
     "paths": {
       "@env/*": ["environments/*"],
-      "@models/*": ["app/models/*"],
-      "@services/*": ["app/services/*"],
       "@apis/*": ["app/apis/*"],
-      "@shared/*": ["app/shared/*"]
+      "@components/*": ["app/components/*"],
+      "@interceptors/*": ["app/interceptors/*"],
+      "@mappers/*": ["app/mappers/*"],
+      "@mocks/*": ["app/mocks/*"],
+      "@models/*": ["app/models/*"],
+      "@pages/*": ["app/pages/*"],
+      "@routes/*": ["app/routes/*"],
+      "@services/*": ["app/services/*"],
+      "@shared/*": ["app/shared/*"],
+      "@stores/*": ["app/stores/*"],
+      "@validators/*": ["app/validators/*"],
     }
   },
   "angularCompilerOptions": {
