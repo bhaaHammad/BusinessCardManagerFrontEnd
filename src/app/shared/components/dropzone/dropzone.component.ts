@@ -8,12 +8,8 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
   selector: 'app-dropzone',
   standalone: true,
   imports: [CommonModule, MatIconModule, MatButtonModule, MatProgressBarModule],
-  template: `
-    
-  `,
-  styles: [`
-    
-  `],
+  templateUrl: './dropzone.component.html',
+  styleUrls: ['./dropzone.component.scss'],
 })
 export class DropzoneComponent {
   @Input() acceptedTypes = 'image/*,.csv,.xml';
