@@ -1,0 +1,45 @@
+<form [formGroup]="filterForm" class="filters-form">
+    <mat-form-field appearance="outline">
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name" placeholder="Filter by name" />
+      <mat-icon matPrefix>search</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Gender</mat-label>
+      <mat-select formControlName="gender">
+        <mat-option [value]="null">All</mat-option>
+        <mat-option value="Male">Male</mat-option>
+        <mat-option value="Female">Female</mat-option>
+        <mat-option value="Other">Other</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Date of Birth</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="dateOfBirth" />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" placeholder="Filter by email" />
+      <mat-icon matPrefix>email</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Phone</mat-label>
+      <input matInput formControlName="phone" placeholder="Filter by phone" />
+      <mat-icon matPrefix>phone</mat-icon>
+    </mat-form-field>
+
+    <button
+      mat-button
+      type="button"
+      (click)="clearFilters()"
+      [disabled]="!hasFilters()">
+      <mat-icon>clear</mat-icon>
+      Clear
+    </button>
+  </form>

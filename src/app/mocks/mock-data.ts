@@ -1,0 +1,41 @@
+import { BusinessCard } from '../models/business-card.model';
+
+export const MOCK_BUSINESS_CARDS: BusinessCard[] = [
+  {
+    id: 6,
+    name: '',
+    gender: null,
+    dateOfBirth: null,
+    email: '',
+    phone: '',
+    photo: null,
+    address: 'testtest',
+    createdAt: '2025-11-10T11:45:07.085053Z',
+    updatedAt: null,
+  },
+  {
+    id: 7,
+    name: 'string',
+    gender: 'string', // Backend can return 'string' as gender value
+    dateOfBirth: '2025-11-10T00:00:00',
+    email: 'string',
+    phone: 'string',
+    photo: 'string',
+    address: 'string',
+    createdAt: '2025-11-10T12:26:21.716559Z',
+    updatedAt: '2025-11-10T12:26:44.227444Z',
+  },
+  {
+    id: 9,
+    name: "Baha'eddin Hammad",
+    gender: 'Male',
+    dateOfBirth: '2025-11-01T00:00:00',
+    email: 'bhaahammad0@gmail.com',
+    phone: '0790917078',
+    photo: null,
+    address: "salah'eddin, amman,jordan\nsalah'eddin, amman,jordan",
+    createdAt: '2025-11-10T20:50:15.171975Z',
+    updatedAt: null,
+  },
+];
+
