@@ -1,0 +1,39 @@
+<div
+      class="dropzone"
+      [class.drag-over]="isDragging()"
+      [class.has-file]="file()"
+      (dragover)="onDragOver($event)"
+      (dragleave)="onDragLeave($event)"
+      (drop)="onDrop($event)"
+      (click)="fileInput.click()"
+      role="button"
+      [attr.aria-label]="ariaLabel"
+      tabindex="0"
+      (keydown.enter)="fileInput.click()"
+      (keydown.space)="fileInput.click(); $event.preventDefault()">
+      <input
+        #fileInput
+        type="file"
+        [accept]="acceptedTypes"
+        (change)="onFileSelected($event)"
+        style="display: none"
+        [attr.aria-label]="ariaLabel" />
+      
+      <div class="dropzone-content">
+        <mat-icon class="dropzone-icon">cloud_upload</mat-icon>
+        <p class="dropzone-text">
+          {{ file() ? file()?.name : placeholder }}
+        </p>
+        <p class="dropzone-hint" *ngIf="!file()">
+          Drag and drop or click to select
+        </p>
+        <button
+          *ngIf="file()"
+          mat-icon-button
+          (click)="removeFile($event)"
+          aria-label="Remove file"
+          type="button">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    </div>

@@ -1,0 +1,86 @@
+.dropzone {
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    padding: 32px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-color: #fafafa;
+    min-height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .dropzone:hover {
+    border-color: #1976d2;
+    background-color: #f0f0f0;
+  }
+
+  .dropzone.drag-over {
+    border-color: #1976d2;
+    background-color: #e3f2fd;
+  }
+
+  .dropzone.has-file {
+    border-color: #4caf50;
+    background-color: #e8f5e9;
+  }
+
+  .dropzone:focus {
+    outline: 2px solid #1976d2;
+    outline-offset: 2px;
+  }
+
+  .dropzone-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+  }
+
+  .dropzone-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    color: #666;
+  }
+
+  .dropzone-text {
+    margin: 0;
+    font-weight: 500;
+    color: #333;
+  }
+
+  .dropzone-hint {
+    margin: 0;
+    font-size: 14px;
+    color: #666;
+  }
+
+  .dark-theme .dropzone {
+    background-color: #2a2a2a;
+    border-color: #555;
+  }
+
+  .dark-theme .dropzone:hover {
+    background-color: #333;
+    border-color: #1976d2;
+  }
+
+  .dark-theme .dropzone.drag-over {
+    background-color: #1e3a5f;
+  }
+
+  .dark-theme .dropzone-icon {
+    color: #aaa;
+  }
+
+  .dark-theme .dropzone-text {
+    color: #fff;
+  }
+
+  .dark-theme .dropzone-hint {
+    color: #aaa;
+  }
