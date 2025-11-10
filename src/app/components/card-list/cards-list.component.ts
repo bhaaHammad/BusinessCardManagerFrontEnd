@@ -78,16 +78,24 @@ export class CardsListComponent {
   }
 
   getPhotoUrl(card: BusinessCard): string {
-    if (card.photoBase64) {
-      return card.photoBase64.startsWith('data:')
-        ? card.photoBase64
-        : `data:image/jpeg;base64,${card.photoBase64}`;
+    if (card.photo) {
+      return card.photo.startsWith('data:')
+        ? card.photo
+        : `data:image/jpeg;base64,${card.photo}`;
     }
     return 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiNFRUVFRUUiLz4KPHBhdGggZD0iTTIwIDEyQzE3LjI0IDEyIDE1IDE0LjI0IDE1IDE3QzE1IDE5Ljc2IDE3LjI0IDIyIDIwIDIyQzIyLjc2IDIyIDI1IDE5Ljc2IDI1IDE3QzI1IDE0LjI0IDIyLjc2IDEyIDIwIDEyWk0yMCAyNEMxNi42NyAyNCAxMCAyNS4zNCAxMCAyOFYzMEgzMFYyOEMzMCAyNS4zNCAyMy4zMyAyNCAyMCAyNFoiIGZpbGw9IiM5OTk5OTkiLz4KPC9zdmc+';
   }
 
-  formatDate(date: string): string {
-    return new Date(date).toLocaleDateString();
+  formatDate(date: string | null): string {
+    if (!date) return '-';
+    try {
+      // Handle ISO date format from backend
+      const dateObj = new Date(date);
+      if (isNaN(dateObj.getTime())) return '-';
+      return dateObj.toLocaleDateString();
+    } catch {
+      return '-';
+    }
   }
 
   deleteCard(card: BusinessCard): void {

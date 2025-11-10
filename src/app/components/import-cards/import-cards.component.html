@@ -1,0 +1,112 @@
+<div class="import-cards">
+    <div class="file-upload-section">
+      <app-dropzone
+        acceptedTypes=".csv"
+        placeholder="Select a CSV file"
+        (fileSelected)="onFileSelected($event)">
+      </app-dropzone>
+  
+      <div *ngIf="selectedFile()" class="file-info">
+        <p>
+          <mat-icon>description</mat-icon>
+          <strong>Selected file:</strong> {{ selectedFile()?.name }}
+          <span class="file-size">({{ getFileSize(selectedFile()?.size || 0) }})</span>
+        </p>
+      </div>
+    </div>
+  
+    <div *ngIf="previewData()" class="preview-section">
+      <h3>Preview Import Data</h3>
+      <div class="preview-stats">
+        <mat-chip-set>
+          <mat-chip>Total Rows: {{ previewData()?.totalRows }}</mat-chip>
+          <mat-chip color="primary">Valid: {{ previewData()?.validRows }}</mat-chip>
+          <mat-chip color="warn" *ngIf="(previewData()?.invalidRows ?? 0) > 0">
+            Invalid: {{ previewData()?.invalidRows }}
+          </mat-chip>
+        </mat-chip-set>
+      </div>
+  
+      <div *ngIf="previewData()?.errors && previewData()!.errors.length > 0" class="errors-section">
+        <h4>Errors:</h4>
+        <ul class="error-list">
+          <li *ngFor="let error of previewData()!.errors">{{ error }}</li>
+        </ul>
+      </div>
+  
+      <div *ngIf="previewData()?.cards && previewData()!.cards.length > 0" class="preview-table">
+        <table mat-table [dataSource]="previewData()!.cards" class="preview-table-content">
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>Name</th>
+            <td mat-cell *matCellDef="let card">{{ card.name }}</td>
+          </ng-container>
+  
+          <ng-container matColumnDef="gender">
+            <th mat-header-cell *matHeaderCellDef>Gender</th>
+            <td mat-cell *matCellDef="let card">{{ card.gender }}</td>
+          </ng-container>
+  
+          <ng-container matColumnDef="dateOfBirth">
+            <th mat-header-cell *matHeaderCellDef>Date of Birth</th>
+            <td mat-cell *matCellDef="let card">{{ card.dateOfBirth }}</td>
+          </ng-container>
+  
+          <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef>Email</th>
+            <td mat-cell *matCellDef="let card">{{ card.email }}</td>
+          </ng-container>
+  
+          <ng-container matColumnDef="phone">
+            <th mat-header-cell *matHeaderCellDef>Phone</th>
+            <td mat-cell *matCellDef="let card">{{ card.phone }}</td>
+          </ng-container>
+  
+          <ng-container matColumnDef="address">
+            <th mat-header-cell *matHeaderCellDef>Address</th>
+            <td mat-cell *matCellDef="let card">{{ card.address || '-' }}</td>
+          </ng-container>
+  
+          <tr mat-header-row *matHeaderRowDef="previewColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: previewColumns"></tr>
+        </table>
+      </div>
+    </div>
+  
+    <div class="import-actions">
+      <button
+        *ngIf="!previewData()"
+        mat-raised-button
+        color="primary"
+        [disabled]="!selectedFile() || loading()"
+        (click)="onPreview()">
+        <mat-spinner *ngIf="loading()" diameter="20" class="button-spinner"></mat-spinner>
+        <mat-icon *ngIf="!loading()">preview</mat-icon>
+        <span>{{ loading() ? 'Loading Preview...' : 'Preview CSV' }}</span>
+      </button>
+      <button
+        *ngIf="previewData()"
+        mat-raised-button
+        color="primary"
+        [disabled]="uploading() || previewData()?.validRows === 0"
+        (click)="onConfirmImport()">
+        <mat-spinner *ngIf="uploading()" diameter="20" class="button-spinner"></mat-spinner>
+        <mat-icon *ngIf="!uploading()">check</mat-icon>
+        <span>{{ uploading() ? 'Importing...' : 'Confirm Import' }}</span>
+      </button>
+      <button
+        *ngIf="previewData()"
+        mat-button
+        [disabled]="uploading()"
+        (click)="onReset()">
+        <mat-icon>refresh</mat-icon>
+        Upload Another File
+      </button>
+      <button
+        mat-button
+        [disabled]="loading() || uploading()"
+        (click)="onCancel()">
+        Cancel
+      </button>
+    </div>
+  </div>
+  

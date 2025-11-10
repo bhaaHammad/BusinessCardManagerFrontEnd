@@ -36,9 +36,10 @@ export class CardDetailsComponent {
     private store: CardsStore,
     private toast: ToastService
   ) {
-    const id = this.route.snapshot.paramMap.get('id');
+    const idParam = this.route.snapshot.paramMap.get('id');
+    const id = idParam ? Number(idParam) : null;
     this.card = computed(() => {
-      if (!id) return null;
+      if (id === null) return null;
       return this.store.cards().find((c) => c.id === id) || null;
     });
   }
@@ -47,10 +48,10 @@ export class CardDetailsComponent {
     const card = this.card();
     if (!card) return this.getDefaultAvatar();
     
-    if (card.photoBase64) {
-      return card.photoBase64.startsWith('data:')
-        ? card.photoBase64
-        : `data:image/jpeg;base64,${card.photoBase64}`;
+    if (card.photo) {
+      return card.photo.startsWith('data:')
+        ? card.photo
+        : `data:image/jpeg;base64,${card.photo}`;
     }
     return this.getDefaultAvatar();
   }
@@ -59,8 +60,16 @@ export class CardDetailsComponent {
     return 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDEyMCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxjaXJjbGUgY3g9IjYwIiBjeT0iNjAiIHI9IjYwIiBmaWxsPSIjRUVFRUVFIi8+CjxwYXRoIGQ9Ik02MCAzNkM1MS42MTIgMzYgNDUgNDIuNjEyIDQ1IDUxQzQ1IDU5LjM4OCA1MS42MTIgNjYgNjAgNjZDNjguMzg4IDY2IDc1IDU5LjM4OCA3NSA1MUM3NSA0Mi42MTIgNjguMzg4IDM2IDYwIDM2Wk02MCA3MkM0NS4wMSA3MiAzMCA3Ni4wMiAzMCA4NEwzMCA5MEg5MFY4NEM5MCA3Ni4wMiA3NC45OSA3MiA2MCA3MloiIGZpbGw9IiM5OTk5OTkiLz4KPC9zdmc+';
   }
 
-  formatDate(date: string): string {
-    return new Date(date).toLocaleDateString();
+  formatDate(date: string | null): string {
+    if (!date) return '-';
+    try {
+      // Handle ISO date format from backend
+      const dateObj = new Date(date);
+      if (isNaN(dateObj.getTime())) return '-';
+      return dateObj.toLocaleDateString();
+    } catch {
+      return '-';
+    }
   }
 
   copyToClipboard(): void {
@@ -69,7 +78,7 @@ export class CardDetailsComponent {
 
     const text = `
 Name: ${card.name}
-Gender: ${card.gender}
+Gender: ${card.gender || '-'}
 Date of Birth: ${this.formatDate(card.dateOfBirth)}
 Email: ${card.email}
 Phone: ${card.phone}

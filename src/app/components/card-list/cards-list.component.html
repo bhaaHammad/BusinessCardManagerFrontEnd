@@ -32,13 +32,13 @@
 
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
-        <td mat-cell *matCellDef="let card">{{ card.name }}</td>
+        <td mat-cell *matCellDef="let card">{{ card.name || '-' }}</td>
       </ng-container>
 
       <ng-container matColumnDef="gender">
         <th mat-header-cell *matHeaderCellDef>Gender</th>
         <td mat-cell *matCellDef="let card">
-          <mat-icon [matTooltip]="card.gender">{{ card.gender  }}</mat-icon>
+          <mat-icon [matTooltip]="card.gender || 'Not specified'">{{ card.gender || '-' }}</mat-icon>
         </td>
       </ng-container>
 
@@ -50,24 +50,26 @@
       <ng-container matColumnDef="email">
         <th mat-header-cell *matHeaderCellDef>Email</th>
         <td mat-cell *matCellDef="let card">
-          <a [href]="'mailto:' + card.email" [attr.aria-label]="'Email ' + card.email">
+          <a *ngIf="card.email" [href]="'mailto:' + card.email" [attr.aria-label]="'Email ' + card.email">
             {{ card.email }}
           </a>
+          <span *ngIf="!card.email">-</span>
         </td>
       </ng-container>
 
       <ng-container matColumnDef="phone">
         <th mat-header-cell *matHeaderCellDef>Phone</th>
         <td mat-cell *matCellDef="let card">
-          <a [href]="'tel:' + card.phone" [attr.aria-label]="'Call ' + card.phone">
+          <a *ngIf="card.phone" [href]="'tel:' + card.phone" [attr.aria-label]="'Call ' + card.phone">
             {{ card.phone }}
           </a>
+          <span *ngIf="!card.phone">-</span>
         </td>
       </ng-container>
 
       <ng-container matColumnDef="address">
         <th mat-header-cell *matHeaderCellDef>Address</th>
-        <td mat-cell *matCellDef="let card">{{ card.address }}</td>
+        <td mat-cell *matCellDef="let card">{{ card.address || '-' }}</td>
       </ng-container>
 
       <ng-container matColumnDef="actions">
@@ -75,7 +77,7 @@
         <td mat-cell *matCellDef="let card">
           <button
             mat-icon-button
-            [routerLink]="['/cards', card.id]"
+            [routerLink]="['/cards', card.id.toString()]"
             [attr.aria-label]="'View details for ' + card.name">
             <mat-icon>visibility</mat-icon>
           </button>

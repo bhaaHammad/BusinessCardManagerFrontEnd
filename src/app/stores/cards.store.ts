@@ -109,7 +109,7 @@ export class CardsStore {
     });
   }
 
-  deleteCard(id: string): void {
+  deleteCard(id: number): void {
     const cardToDelete = this.state().cards.find((c) => c.id === id);
     if (!cardToDelete) {
       return;

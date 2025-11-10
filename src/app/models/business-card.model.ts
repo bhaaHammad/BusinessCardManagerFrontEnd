@@ -1,12 +1,28 @@
 import { Gender } from "app/shared/types";
 
 export interface BusinessCard {
-  id: string;
+  id: number;
   name: string;
-  gender: Gender;
-  dateOfBirth: string;
+  gender: Gender | string | null; // Allow string for backend compatibility
+  dateOfBirth: string | null;
   email: string;
   phone: string;
   address: string;
-  photoBase64?: string;
+  photo: string | null;
+  createdAt?: string;
+  updatedAt?: string | null;
+}
+
+// Backend API Response Structure
+export interface ApiResponse<T> {
+  status: string;
+  message: string | null;
+  data: {
+    result: T;
+    success: boolean;
+    message: string;
+    errorList: any[];
+  };
+  errors: any[];
+  timeGenerated: string;
 }
