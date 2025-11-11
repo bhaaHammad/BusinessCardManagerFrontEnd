@@ -65,9 +65,20 @@ export class CardsApiService {
     );
   }
 
+  previewXml(file: File): Observable<{ cards: CreateBusinessCardRequest[], errors: string[], totalRows: number, validRows: number, invalidRows: number }> {
+  const formData = new FormData();
+  formData.append('file', file);
+
+  return this.http.postFormData<ApiResponse<{ cards: CreateBusinessCardRequest[], errors: string[], totalRows: number, validRows: number, invalidRows: number }>>(
+    `${this.basePath}/import/xml/preview`, formData
+  ).pipe(
+    map(res => res.data.result)
+  );
+}
+
   commitImport(cards: CreateBusinessCardRequest[]): Observable<{ message: string; importedCount: number }> {
     return this.http.post<ApiResponse<{ message: string; importedCount: number }>>(
-      `${this.basePath}/import/csv/commit`,
+      `${this.basePath}/import/commit`,
       { cards }
     ).pipe(map((response) => response.data.result));
   }
