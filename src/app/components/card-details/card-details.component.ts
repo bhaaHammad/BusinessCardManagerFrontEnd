@@ -47,7 +47,7 @@ export class CardDetailsComponent {
   getPhotoUrl(): string {
     const card = this.card();
     if (!card) return this.getDefaultAvatar();
-    
+
     if (card.photo) {
       return card.photo.startsWith('data:')
         ? card.photo

@@ -51,6 +51,7 @@ export class CardsApiService {
   }> {
     const formData = new FormData();
     formData.append('file', file);
+
     return this.http.postFormData<ApiResponse<{
       cards: CreateBusinessCardRequest[];
       errors: string[];
@@ -58,7 +59,12 @@ export class CardsApiService {
       validRows: number;
       invalidRows: number;
     }>>(`${this.basePath}/import/csv/preview`, formData).pipe(
-      map((response) => response.data.result)
+      map((response) => {
+        if (!response.data.success) {
+          throw new Error(response.data.message || 'Failed to preview CSV file');
+        }
+        return response.data.result;
+      })
     );
   }
 

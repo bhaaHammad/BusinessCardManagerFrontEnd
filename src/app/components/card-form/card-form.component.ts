@@ -19,9 +19,7 @@ import {
   emailValidator,
   phoneValidator,
   dateOfBirthValidator,
-  imageBase64Validator,
 } from '@validators/index';
-import { Gender } from '@shared/types';
 
 @Component({
   selector: 'app-card-form',
@@ -104,7 +102,7 @@ export class CardFormComponent {
 
   formData.append('Name', formValue.name);
   formData.append('Gender', formValue.gender);
-  formData.append('DateOfBirth', new Date(formValue.dateOfBirth).toISOString());
+  formData.append('DateOfBirth', this.formatDate(formValue.dateOfBirth));
   formData.append('Email', formValue.email);
   formData.append('Phone', formValue.phone);
   formData.append('Address', formValue.address || '');
@@ -120,6 +118,13 @@ export class CardFormComponent {
 
   onCancel(): void {
     this.router.navigate(['/cards']);
+  }
+
+  private formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 }
 
