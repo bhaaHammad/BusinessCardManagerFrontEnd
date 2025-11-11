@@ -20,7 +20,7 @@ export class HttpService {
         }
       });
     }
-    
+
     return this.http.get<T>(`${this.baseUrl}${url}`, { params: httpParams });
   }
 
