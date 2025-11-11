@@ -11,7 +11,7 @@ export class HttpService {
 
   constructor(private http: HttpClient) {}
 
-  get<T>(url: string, params?: Record<string, string | number | boolean>): Observable<T> {
+  get<T>(url: string, params?: Record<string, string | number | boolean>, p0?: { responseType: string; }): Observable<T> {
     let httpParams = new HttpParams();
     if (params) {
       Object.entries(params).forEach(([key, value]) => {

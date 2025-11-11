@@ -38,9 +38,6 @@ export class CardsApiService {
     );
   }
 
-  export(format: 'csv' | 'xml'): Observable<Blob> {
-    return this.http.post<Blob>(`${this.basePath}/export?format=${format}`, {});
-  }
 
   previewCsv(file: File): Observable<{
     cards: CreateBusinessCardRequest[];
@@ -72,9 +69,6 @@ export class CardsApiService {
     return this.http.post<ApiResponse<{ message: string; importedCount: number }>>(
       `${this.basePath}/import/csv/commit`,
       { cards }
-    ).pipe(
-      map((response) => response.data.result)
-    );
+    ).pipe(map((response) => response.data.result));
   }
 }
-
