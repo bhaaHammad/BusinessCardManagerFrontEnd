@@ -46,7 +46,7 @@ export class CardFormComponent {
   cardForm: FormGroup;
   photoPreview = signal<string | null>(null);
   isEditMode = signal(false);
-  
+
   get loading(): boolean {
     return this.store.loading();
   }
@@ -64,7 +64,7 @@ export class CardFormComponent {
       email: ['', [Validators.required, emailValidator()]],
       phone: ['', [Validators.required, phoneValidator()]],
       address: [''],
-      photoBase64: ['', [imageBase64Validator(environment.maxPhotoBytes)]],
+      photo: [null],
     });
   }
 
@@ -81,48 +81,42 @@ export class CardFormComponent {
 
     const reader = new FileReader();
     reader.onload = () => {
-      const base64 = reader.result as string;
-      this.photoPreview.set(base64);
-      this.cardForm.patchValue({ photoBase64: base64 });
+      this.photoPreview.set(reader.result as string);
     };
-
-    reader.onerror = () => {
-      this.toast.showError('Failed to read photo');
-    };
-
     reader.readAsDataURL(file);
+
+    this.cardForm.patchValue({ photo: file });
   }
 
   removePhoto(): void {
     this.photoPreview.set(null);
-    this.cardForm.patchValue({ photoBase64: '' });
+    this.cardForm.patchValue({ photo: '' });
   }
 
   onSubmit(): void {
-    if (this.cardForm.invalid) {
-      this.cardForm.markAllAsTouched();
-      return;
-    }
-
-    const formValue = this.cardForm.value;
-    const cardData = {
-      name: formValue.name,
-      gender: formValue.gender as Gender,
-      dateOfBirth: new Date(formValue.dateOfBirth).toISOString().split('T')[0],
-      email: formValue.email,
-      phone: formValue.phone,
-      address: formValue.address || '',
-      photoBase64: formValue.photoBase64 || undefined,
-    };
-
-    this.store.createCard(cardData).pipe(first()).subscribe({
-      next: () => {
-        this.router.navigate(['/cards']);
-      },
-      error: () => {
-      },
-    });
+  if (this.cardForm.invalid) {
+    this.cardForm.markAllAsTouched();
+    return;
   }
+
+  const formValue = this.cardForm.value;
+  const formData = new FormData();
+
+  formData.append('Name', formValue.name);
+  formData.append('Gender', formValue.gender);
+  formData.append('DateOfBirth', new Date(formValue.dateOfBirth).toISOString());
+  formData.append('Email', formValue.email);
+  formData.append('Phone', formValue.phone);
+  formData.append('Address', formValue.address || '');
+  if (formValue.photo) {
+    formData.append('Photo', formValue.photo);
+  }
+
+  this.store.createCard(formData).pipe(first()).subscribe({
+    next: () => this.router.navigate(['/cards']),
+    error: () => this.toast.showError('Failed to create business card'),
+  });
+}
 
   onCancel(): void {
     this.router.navigate(['/cards']);

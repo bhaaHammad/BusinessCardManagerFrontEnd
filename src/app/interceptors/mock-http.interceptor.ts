@@ -15,9 +15,9 @@ export const mockHttpInterceptor: HttpInterceptorFn = (req, next) => {
     url.searchParams.forEach((value, key) => {
       params[key] = value;
     });
-    
+
     let filteredCards = [...MOCK_BUSINESS_CARDS];
-    
+
     if (params['name']) {
       filteredCards = filteredCards.filter((c) =>
         c.name.toLowerCase().includes(params['name'].toLowerCase())
@@ -64,12 +64,12 @@ export const mockHttpInterceptor: HttpInterceptorFn = (req, next) => {
       email: body.email || '',
       phone: body.phone || '',
       address: body.address || '',
-      photo: body.photoBase64 || null,
+      photo: body.photo || null,
       createdAt: new Date().toISOString(),
       updatedAt: null,
     };
     MOCK_BUSINESS_CARDS.push(newCard);
-    
+
     const response: ApiResponse<BusinessCard> = {
       status: 'success',
       message: null,
@@ -82,7 +82,7 @@ export const mockHttpInterceptor: HttpInterceptorFn = (req, next) => {
       errors: [],
       timeGenerated: new Date().toISOString(),
     };
-    
+
     return of(new HttpResponse({ status: 201, body: response })).pipe(delay(300));
   }
 
@@ -95,7 +95,7 @@ export const mockHttpInterceptor: HttpInterceptorFn = (req, next) => {
         MOCK_BUSINESS_CARDS.splice(index, 1);
       }
     }
-    
+
     const response: ApiResponse<void> = {
       status: 'success',
       message: null,
@@ -108,7 +108,7 @@ export const mockHttpInterceptor: HttpInterceptorFn = (req, next) => {
       errors: [],
       timeGenerated: new Date().toISOString(),
     };
-    
+
     return of(new HttpResponse({ status: 200, body: response })).pipe(delay(300));
   }
 
@@ -117,7 +117,7 @@ export const mockHttpInterceptor: HttpInterceptorFn = (req, next) => {
     const format = url.searchParams.get('format') || 'csv';
     const body = req.body as { cards?: BusinessCard[] };
     const cards = body?.cards || MOCK_BUSINESS_CARDS;
-    
+
     let content = '';
     if (format === 'csv') {
       content = 'Name,Gender,DateOfBirth,Email,Phone,Address\n';
@@ -131,7 +131,7 @@ export const mockHttpInterceptor: HttpInterceptorFn = (req, next) => {
       });
       content += '</BusinessCards>';
     }
-    
+
     const blob = new Blob([content], {
       type: format === 'csv' ? 'text/csv' : 'application/xml',
     });
@@ -217,14 +217,14 @@ export const mockHttpInterceptor: HttpInterceptorFn = (req, next) => {
       validRows: 3,
       invalidRows: 2,
     };
-    
+
     return of(new HttpResponse({ status: 200, body: response })).pipe(delay(800));
   }
 
   if (req.method === 'POST' && req.url.includes('/api/cards/import/csv/commit')) {
     const body = req.body as { cards: Array<Omit<BusinessCard, 'id'>> };
     const cardsToImport = body.cards || [];
-    
+
     cardsToImport.forEach((card) => {
       const newCard: BusinessCard = {
         ...card,
@@ -240,7 +240,7 @@ export const mockHttpInterceptor: HttpInterceptorFn = (req, next) => {
       message: 'CSV file imported successfully',
       importedCount: cardsToImport.length,
     };
-    
+
     return of(new HttpResponse({ status: 200, body: response })).pipe(delay(1000));
   }
 

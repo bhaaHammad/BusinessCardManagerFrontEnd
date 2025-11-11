@@ -4,7 +4,6 @@ import { CardsApiService } from '@apis/cards.api';
 import { BusinessCard } from '@models/business-card.model';
 import { ToastService } from '@services/toast.service';
 import { BusinessCardFilters } from '@models/business-card-filters.model';
-import { CreateBusinessCardRequest } from '@models/dtos/create-business-card.dto';
 
 interface CardsState {
   cards: BusinessCard[];
@@ -33,7 +32,7 @@ export class CardsStore {
   filteredCards = computed(() => {
     const cards = this.cards();
     const filters = this.filters();
-    
+
     return cards.filter((card) => {
       if (filters.name && !card.name.toLowerCase().includes(filters.name.toLowerCase())) {
         return false;
@@ -65,7 +64,6 @@ export class CardsStore {
 
   loadCards(filters?: BusinessCardFilters): void {
     this.state.update((s) => ({ ...s, loading: true, error: null, filters: filters || {} }));
-
     this.api.list(filters).subscribe({
       next: (cards) => {
         this.state.update((s) => ({ ...s, cards, loading: false }));
@@ -81,11 +79,11 @@ export class CardsStore {
     });
   }
 
-  createCard(card: CreateBusinessCardRequest): Observable<BusinessCard> {
+  createCard(cardFormData: FormData): Observable<BusinessCard> {
     this.state.update((s) => ({ ...s, loading: true, error: null }));
 
     return new Observable((observer) => {
-      this.api.create(card).subscribe({
+      this.api.create(cardFormData).subscribe({
         next: (newCard) => {
           this.state.update((s) => ({
             ...s,

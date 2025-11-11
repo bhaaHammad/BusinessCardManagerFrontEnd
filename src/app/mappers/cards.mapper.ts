@@ -8,7 +8,7 @@ export function mapToCreateRequest(card: Partial<BusinessCard>): CreateBusinessC
   if (card.gender === 'Male' || card.gender === 'Female' || card.gender === 'Other') {
     gender = card.gender;
   }
-  
+
   return {
     name: card.name || '',
     gender: gender,
@@ -16,7 +16,7 @@ export function mapToCreateRequest(card: Partial<BusinessCard>): CreateBusinessC
     email: card.email || '',
     phone: card.phone || '',
     address: card.address || '',
-    photoBase64: card.photo || undefined,
+    photo: card.photo || undefined,
   };
 }
 

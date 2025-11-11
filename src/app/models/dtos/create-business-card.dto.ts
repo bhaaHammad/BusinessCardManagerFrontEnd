@@ -7,5 +7,5 @@ export interface CreateBusinessCardRequest {
     email: string;
     phone: string;
     address: string;
-    photoBase64?: string;
+    photo?: string;
   }

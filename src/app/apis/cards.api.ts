@@ -16,7 +16,7 @@ export class CardsApiService {
   list(filters?: BusinessCardFilters): Observable<BusinessCard[]> {
     const params: Record<string, string> = {};
     if (filters?.name) params['name'] = filters.name;
-    if (filters?.dateOfBirth) params['dob'] = filters.dateOfBirth;
+    if (filters?.dateOfBirth) params['dateOfBirth'] = filters.dateOfBirth;
     if (filters?.phone) params['phone'] = filters.phone;
     if (filters?.gender) params['gender'] = filters.gender;
     if (filters?.email) params['email'] = filters.email;
@@ -26,8 +26,8 @@ export class CardsApiService {
     );
   }
 
-  create(card: CreateBusinessCardRequest): Observable<BusinessCard> {
-    return this.http.post<ApiResponse<BusinessCard>>(this.basePath, card).pipe(
+  create(cardFormData: FormData): Observable<BusinessCard> {
+    return this.http.post<ApiResponse<BusinessCard>>(this.basePath, cardFormData).pipe(
       map((response) => response.data.result)
     );
   }
