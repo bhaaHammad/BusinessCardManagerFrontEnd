@@ -1,6 +1,7 @@
 <div class="import-cards">
   <div class="file-upload-section">
-    <app-dropzone acceptedTypes=".csv" placeholder="Select a CSV file" (fileSelected)="onFileSelected($event)">
+    <app-dropzone acceptedTypes=".csv,.xml" placeholder="Select a CSV or XML file"
+      (fileSelected)="onFileSelected($event)">
     </app-dropzone>
 
     <div *ngIf="selectedFile()" class="file-info">
