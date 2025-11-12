@@ -1,0 +1,23 @@
+# OneDrive ignore file
+# Prevents OneDrive from syncing these folders/files to avoid file locking issues
+
+# Angular build cache (causes EPERM errors when OneDrive locks files)
+.angular/cache/
+.angular/
+
+# Node modules (already large, don't need to sync)
+node_modules/
+
+# Build outputs
+dist/
+out-tsc/
+tmp/
+
+# IDE files
+.vscode/
+.idea/
+
+# Logs
+*.log
+npm-debug.log*
+

@@ -2,45 +2,6 @@
 
 @include mat.core();
 
-// Define light theme
-$light-primary: mat.define-palette(mat.$indigo-palette);
-$light-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
-$light-warn: mat.define-palette(mat.$red-palette);
-
-$light-theme: mat.define-light-theme((
-  color: (
-    primary: $light-primary,
-    accent: $light-accent,
-    warn: $light-warn,
-  ),
-  typography: mat.define-typography-config(),
-  density: 0,
-));
-
-// Define dark theme
-$dark-primary: mat.define-palette(mat.$blue-palette);
-$dark-accent: mat.define-palette(mat.$amber-palette, A200, A100, A400);
-$dark-warn: mat.define-palette(mat.$red-palette);
-
-$dark-theme: mat.define-dark-theme((
-  color: (
-    primary: $dark-primary,
-    accent: $dark-accent,
-    warn: $dark-warn,
-  ),
-  typography: mat.define-typography-config(),
-  density: 0,
-));
-
-// Apply light theme by default
-@include mat.all-component-themes($light-theme);
-
-// Apply dark theme when .dark-theme class is present
-.dark-theme {
-  @include mat.all-component-colors($dark-theme);
-}
-
-// Global styles
 html, body {
   height: 100%;
   margin: 0;
@@ -51,7 +12,6 @@ html, body {
   box-sizing: border-box;
 }
 
-// Accessibility
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -64,7 +24,6 @@ html, body {
   border-width: 0;
 }
 
-// Utility classes
 .container {
   max-width: 1200px;
   margin: 0 auto;
@@ -75,7 +34,6 @@ html, body {
   flex: 1 1 auto;
 }
 
-// Table styles
 table {
   width: 100%;
 }
@@ -90,7 +48,6 @@ table {
   }
 }
 
-// Avatar styles
 .avatar {
   width: 40px;
   height: 40px;
@@ -98,13 +55,9 @@ table {
   object-fit: cover;
 }
 
-// Responsive
 @media (max-width: 768px) {
   .container {
     padding: 8px;
   }
 }
 
-
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

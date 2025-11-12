@@ -1,0 +1,46 @@
+.filters-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 16px;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    margin-bottom: 16px;
+  }
+
+  mat-form-field {
+    flex: 1 1 200px;
+    min-width: 150px;
+  }
+
+  .dark-theme .filters-form {
+    background-color: #2a2a2a;
+  }
+
+  @media (max-width: 768px) {
+    .filters-form {
+      flex-direction: column;
+    }
+
+    mat-form-field {
+      width: 100%;
+    }
+  }
+
+  .filters-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+
+  mat-form-field {
+    flex: 1 1 200px;
+  }
+
+  .buttons-container {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+  }
+}
