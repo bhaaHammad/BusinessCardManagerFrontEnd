@@ -63,7 +63,6 @@ export class CardDetailsComponent {
   formatDate(date: string | null): string {
     if (!date) return '-';
     try {
-      // Handle ISO date format from backend
       const dateObj = new Date(date);
       if (isNaN(dateObj.getTime())) return '-';
       return dateObj.toLocaleDateString();

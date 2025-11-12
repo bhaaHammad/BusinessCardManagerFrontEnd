@@ -2,11 +2,6 @@
 
 @include mat.core();
 
-// Since we're using a prebuilt theme (azure-blue), we'll keep custom theming minimal
-// The prebuilt theme is already applied via angular.json
-// Custom theme overrides can be added here if needed
-
-// Global styles
 html, body {
   height: 100%;
   margin: 0;
@@ -17,7 +12,6 @@ html, body {
   box-sizing: border-box;
 }
 
-// Accessibility
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -30,7 +24,6 @@ html, body {
   border-width: 0;
 }
 
-// Utility classes
 .container {
   max-width: 1200px;
   margin: 0 auto;
@@ -41,7 +34,6 @@ html, body {
   flex: 1 1 auto;
 }
 
-// Table styles
 table {
   width: 100%;
 }
@@ -56,7 +48,6 @@ table {
   }
 }
 
-// Avatar styles
 .avatar {
   width: 40px;
   height: 40px;
@@ -64,7 +55,6 @@ table {
   object-fit: cover;
 }
 
-// Responsive
 @media (max-width: 768px) {
   .container {
     padding: 8px;

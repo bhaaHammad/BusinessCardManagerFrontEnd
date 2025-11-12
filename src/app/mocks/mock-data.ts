@@ -16,7 +16,7 @@ export const MOCK_BUSINESS_CARDS: BusinessCard[] = [
   {
     id: 7,
     name: 'string',
-    gender: 'string', // Backend can return 'string' as gender value
+    gender: 'string',
     dateOfBirth: '2025-11-10T00:00:00',
     email: 'string',
     phone: 'string',
@@ -38,4 +38,3 @@ export const MOCK_BUSINESS_CARDS: BusinessCard[] = [
     updatedAt: null,
   },
 ];
-

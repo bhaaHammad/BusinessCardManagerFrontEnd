@@ -15,7 +15,6 @@
       <mat-select formControlName="gender" required>
         <mat-option value="Male">Male</mat-option>
         <mat-option value="Female">Female</mat-option>
-        <mat-option value="Other">Other</mat-option>
       </mat-select>
       <mat-error *ngIf="cardForm.get('gender')?.hasError('required')">
         Gender is required

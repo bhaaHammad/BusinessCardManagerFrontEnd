@@ -28,7 +28,7 @@
 
   <div class="preview-section" *ngIf="hasFile() && !isDecoded()">
     <div class="image-preview">
-      <img [src]="dataUrl()!" [alt]="getFileName()" />
+      <img [src]="dataUrl()!" [alt]="getFileName()" title="QR" />
       <div class="image-info">
         <span class="file-name">{{ getFileName() }}</span>
         <span class="file-size">{{ getFileSize() }}</span>

@@ -11,8 +11,6 @@ import { CardsStore } from '@stores/cards.store';
 import { BusinessCard } from '@models/business-card.model';
 import { ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
-import { FileDownloadService } from '@services/file-download.service';
-import { ToastService } from '@services/toast.service';
 
 @Component({
   selector: 'app-cards-list',
@@ -64,13 +62,7 @@ export class CardsListComponent {
     return cards.slice(start, end);
   });
 
-  constructor(
-    private store: CardsStore,
-    private dialog: MatDialog,
-    private fileDownload: FileDownloadService,
-    private toast: ToastService
-  ) {}
-
+  constructor(private store: CardsStore, private dialog: MatDialog) {}
 
   onPageChange(event: PageEvent): void {
     this.pageSize.set(event.pageSize);
@@ -89,7 +81,6 @@ export class CardsListComponent {
   formatDate(date: string | null): string {
     if (!date) return '-';
     try {
-      // Handle ISO date format from backend
       const dateObj = new Date(date);
       if (isNaN(dateObj.getTime())) return '-';
       return dateObj.toLocaleDateString();

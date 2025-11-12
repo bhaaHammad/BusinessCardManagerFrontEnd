@@ -1,3 +1,4 @@
+import { ExportApiService } from './../../apis/export.api';
 import { Component, effect, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -38,8 +39,7 @@ export class CardFiltersComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private store: CardsStore,
-    private cardsApi: CardsApiService
-
+    private exportApiService: ExportApiService
   ) {
     this.filterForm = this.fb.group({
       name: [''],
@@ -102,58 +102,13 @@ export class CardFiltersComponent implements OnInit {
     }
   }
 
- exportAsCsv(): void {
-    const filters = this.store.filters();
-
-    const params = new URLSearchParams();
-    Object.entries(filters).forEach(([key, value]) => {
-      if (value !== undefined && value !== null && value !== '') {
-        params.append(key, value as string);
-      }
-    });
-
-    const url = `${environment.baseUrl}/api/business-cards/export/csv?${params.toString()}`;
-
-    fetch(url)
-      .then((res) => {
-        if (!res.ok) throw new Error('Failed to export CSV.');
-        return res.blob();
-      })
-      .then((blob) => this.downloadFile(blob, 'BusinessCards.csv'))
-      .catch((err) => alert(err.message));
+  exportAsCsv(): void {
+    this.exportApiService.exportAsCsv();
   }
 
-private downloadFile(blob: Blob, filename: string): void {
-  const url = window.URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = filename;
-  link.click();
-  window.URL.revokeObjectURL(url);
-}
-
-
-exportAsXml(): void {
-    const filters = this.store.filters();
-
-    const params = new URLSearchParams();
-    Object.entries(filters).forEach(([key, value]) => {
-      if (value !== undefined && value !== null && value !== '') {
-        params.append(key, value as string);
-      }
-    });
-
-    const url = `${environment.baseUrl}/api/business-cards/export/xml?${params.toString()}`;
-
-    fetch(url)
-      .then((res) => {
-        if (!res.ok) throw new Error('Failed to export XML.');
-        return res.blob();
-      })
-      .then((blob) => this.downloadFile(blob, 'BusinessCards.xml'))
-      .catch((err) => alert(err.message));
+  exportAsXml(): void {
+    this.exportApiService.exportAsXml();
   }
-
 
   clearFilters(): void {
     this.filterForm.reset({
@@ -165,4 +120,3 @@ exportAsXml(): void {
     });
   }
 }
-

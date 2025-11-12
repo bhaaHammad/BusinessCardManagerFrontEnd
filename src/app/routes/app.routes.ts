@@ -1,4 +1,4 @@
-import { ImportQrPageComponent } from './pages/qr-import.component';
+import { ImportQrPageComponent } from '@pages/qr-import.component';
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
