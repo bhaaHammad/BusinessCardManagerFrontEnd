@@ -12,6 +12,7 @@ import { ToastService } from '@services/toast.service';
 import { CardsStore } from '@stores/cards.store';
 import { CreateBusinessCardRequest } from '@models/dtos/create-business-card.dto';
 import { first, Observable } from 'rxjs';
+import { ImportApiService } from '@apis/import.api';
 
 @Component({
   selector: 'app-import-cards',
@@ -24,11 +25,11 @@ import { first, Observable } from 'rxjs';
     MatProgressSpinnerModule,
     MatChipsModule,
     MatTableModule,
-    DropzoneComponent
+    DropzoneComponent,
   ],
   templateUrl: './import-cards.component.html',
   styleUrls: ['./import-cards.component.scss'],
-  providers: [CardsApiService, ToastService, CardsStore]
+  providers: [CardsApiService, ToastService, CardsStore],
 })
 export class ImportCardsComponent {
   selectedFile = signal<File | null>(null);
@@ -42,16 +43,24 @@ export class ImportCardsComponent {
     invalidRows: number;
   } | null>(null);
 
-  previewColumns: string[] = ['name', 'gender', 'dateOfBirth', 'email', 'phone', 'address'];
+  previewColumns: string[] = [
+    'name',
+    'gender',
+    'dateOfBirth',
+    'email',
+    'phone',
+    'address',
+  ];
 
   @Output() importCompleted = new EventEmitter<void>();
 
   constructor(
+    private importApi: ImportApiService,
     private cardsApi: CardsApiService,
     private router: Router,
     private toast: ToastService,
     private cardsStore: CardsStore
-  ) { }
+  ) {}
 
   onFileSelected(file: File | null): void {
     this.selectedFile.set(file);
@@ -63,7 +72,7 @@ export class ImportCardsComponent {
     const k = 1024;
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+    return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
   }
 
   onPreview(): void {
@@ -71,31 +80,23 @@ export class ImportCardsComponent {
     if (!file) return;
 
     const ext = file.name.split('.').pop()?.toLowerCase();
-    if (ext === 'csv') {
-      this.previewCsv(file);
-    } else if (ext === 'xml') {
-      this.previewXml(file);
+    if (ext === 'csv' || ext === 'xml') {
+      this.previewFile(file);
     } else {
       this.toast.showError('Please select a CSV or XML file');
     }
   }
 
-  private previewCsv(file: File) {
+  private previewFile(file: File) {
     this.loading.set(true);
-    this.cardsApi.previewCsv(file).pipe(first()).subscribe({
-      next: (response) => this.handlePreviewResponse(response),
-      error: (err) => this.handlePreviewError(err),
-      complete: () => this.loading.set(false)
-    });
-  }
-
-  private previewXml(file: File) {
-    this.loading.set(true);
-    this.cardsApi.previewXml(file).pipe(first()).subscribe({
-      next: (response) => this.handlePreviewResponse(response),
-      error: (err) => this.handlePreviewError(err),
-      complete: () => this.loading.set(false)
-    });
+    this.importApi
+      .previewFile(file)
+      .pipe(first())
+      .subscribe({
+        next: (response) => this.handlePreviewResponse(response),
+        error: (err) => this.handlePreviewError(err),
+        complete: () => this.loading.set(false),
+      });
   }
 
   private handlePreviewResponse(response: {
@@ -117,10 +118,10 @@ export class ImportCardsComponent {
   }
 
   private handlePreviewError(error: any, fileType: string = 'file') {
-    const errorMessage = error.error?.message || `Failed to preview ${fileType}`;
+    const errorMessage =
+      error.error?.message || `Failed to preview ${fileType}`;
     this.toast.showError(errorMessage);
   }
-
 
   onConfirmImport(): void {
     const preview = this.previewData();
@@ -130,22 +131,23 @@ export class ImportCardsComponent {
     this.uploading.set(true);
 
     let request$: Observable<any>;
-    request$ = this.cardsApi.commitImport(preview.cards);
+    request$ = this.cardsApi.bulkCreate(preview.cards);
 
     request$.pipe(first()).subscribe({
       next: (response) => {
         this.uploading.set(false);
-        this.toast.showSuccess(`Successfully imported ${response.importedCount} business card(s)`);
+        this.toast.showSuccess(
+          `Successfully imported ${response.importedCount} business card(s)`
+        );
         this.cardsStore.loadCards();
         this.importCompleted.emit();
       },
       error: (err) => {
         this.uploading.set(false);
         this.toast.showError(err.error?.message || 'Failed to import file');
-      }
+      },
     });
   }
-
 
   onReset(): void {
     this.selectedFile.set(null);

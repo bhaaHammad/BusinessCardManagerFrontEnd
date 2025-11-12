@@ -1,111 +1,90 @@
 <div class="cards-list-container">
-    <div class="list-header">
-      <h2>Business Cards ({{ totalCount }})</h2>
-    </div>
-
-    <div *ngIf="loading" class="loading-spinner">
-      <mat-spinner diameter="50"></mat-spinner>
-    </div>
-
-    <div *ngIf="!loading && displayedCards().length === 0" class="empty-state">
-      <mat-icon>inbox</mat-icon>
-      <p>No business cards found</p>
-    </div>
-
-    <table
-      *ngIf="!loading && displayedCards().length > 0"
-      mat-table
-      [dataSource]="displayedCards()"
-      class="cards-table"
-      [attr.aria-label]="'Business cards table with ' + displayedCards().length + ' rows'">
-      
-      <ng-container matColumnDef="photo">
-        <th mat-header-cell *matHeaderCellDef>Photo</th>
-        <td mat-cell *matCellDef="let card">
-          <img
-            [src]="getPhotoUrl(card)"
-            [alt]="card.name + ' photo'"
-            class="avatar"
-            onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiNFRUVFRUUiLz4KPHBhdGggZD0iTTIwIDEyQzE3LjI0IDEyIDE1IDE0LjI0IDE1IDE3QzE1IDE5Ljc2IDE3LjI0IDIyIDIwIDIyQzIyLjc2IDIyIDI1IDE5Ljc2IDI1IDE3QzI1IDE0LjI0IDIyLjc2IDEyIDIwIDEyWk0yMCAyNEMxNi42NyAyNCAxMCAyNS4zNCAxMCAyOFYzMEgzMFYyOEMzMCAyNS4zNCAyMy4zMyAyNCAyMCAyNFoiIGZpbGw9IiM5OTk5OTkiLz4KPC9zdmc+'"/>
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
-        <td mat-cell *matCellDef="let card">{{ card.name || '-' }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="gender">
-        <th mat-header-cell *matHeaderCellDef>Gender</th>
-        <td mat-cell *matCellDef="let card">
-          <mat-icon [matTooltip]="card.gender || 'Not specified'">{{ card.gender || '-' }}</mat-icon>
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="dateOfBirth">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Date of Birth</th>
-        <td mat-cell *matCellDef="let card">{{ formatDate(card.dateOfBirth) }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="email">
-        <th mat-header-cell *matHeaderCellDef>Email</th>
-        <td mat-cell *matCellDef="let card">
-          <a *ngIf="card.email" [href]="'mailto:' + card.email" [attr.aria-label]="'Email ' + card.email">
-            {{ card.email }}
-          </a>
-          <span *ngIf="!card.email">-</span>
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="phone">
-        <th mat-header-cell *matHeaderCellDef>Phone</th>
-        <td mat-cell *matCellDef="let card">
-          <a *ngIf="card.phone" [href]="'tel:' + card.phone" [attr.aria-label]="'Call ' + card.phone">
-            {{ card.phone }}
-          </a>
-          <span *ngIf="!card.phone">-</span>
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="address">
-        <th mat-header-cell *matHeaderCellDef>Address</th>
-        <td mat-cell *matCellDef="let card">{{ card.address || '-' }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef>Actions</th>
-        <td mat-cell *matCellDef="let card">
-          <button
-            mat-icon-button
-            [routerLink]="['/cards', card.id.toString()]"
-            [attr.aria-label]="'View details for ' + card.name">
-            <mat-icon>visibility</mat-icon>
-          </button>
-          <button
-            mat-icon-button
-            color="warn"
-            (click)="deleteCard(card)"
-            [attr.aria-label]="'Delete ' + card.name">
-            <mat-icon>delete</mat-icon>
-          </button>
-        </td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-      <tr
-        mat-row
-        *matRowDef="let row; columns: displayedColumns"
-        role="row">
-      </tr>
-    </table>
-
-    <mat-paginator
-      *ngIf="!loading && displayedCards().length > 0"
-      [length]="totalCount"
-      [pageSize]="pageSize()"
-      [pageIndex]="pageIndex()"
-      [pageSizeOptions]="[10, 25, 50, 100]"
-      (page)="onPageChange($event)"
-      aria-label="Select page of business cards">
-    </mat-paginator>
+  <div class="list-header">
+    <h2>Business Cards ({{ totalCount }})</h2>
   </div>
+
+  <div *ngIf="loading" class="loading-spinner">
+    <mat-spinner diameter="50"></mat-spinner>
+  </div>
+
+  <div *ngIf="!loading && displayedCards().length === 0" class="empty-state">
+    <mat-icon>inbox</mat-icon>
+    <p>No business cards found</p>
+  </div>
+
+  <table *ngIf="!loading && displayedCards().length > 0" mat-table [dataSource]="displayedCards()" class="cards-table"
+    [attr.aria-label]="'Business cards table with ' + displayedCards().length + ' rows'">
+
+    <ng-container matColumnDef="photo">
+      <th mat-header-cell *matHeaderCellDef>Photo</th>
+      <td mat-cell *matCellDef="let card">
+        <img [src]="getPhotoUrl(card)" [alt]="card.name + ' photo'" class="avatar" title="abater"
+          onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiNFRUVFRUUiLz4KPHBhdGggZD0iTTIwIDEyQzE3LjI0IDEyIDE1IDE0LjI0IDE1IDE3QzE1IDE5Ljc2IDE3LjI0IDIyIDIwIDIyQzIyLjc2IDIyIDI1IDE5Ljc2IDI1IDE3QzI1IDE0LjI0IDIyLjc2IDEyIDIwIDEyWk0yMCAyNEMxNi42NyAyNCAxMCAyNS4zNCAxMCAyOFYzMEgzMFYyOEMzMCAyNS4zNCAyMy4zMyAyNCAyMCAyNFoiIGZpbGw9IiM5OTk5OTkiLz4KPC9zdmc+'" />
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+      <td mat-cell *matCellDef="let card">{{ card.name || '-' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="gender">
+      <th mat-header-cell *matHeaderCellDef>Gender</th>
+      <td mat-cell *matCellDef="let card">
+        <mat-icon [matTooltip]="card.gender || 'Not specified'">{{ card.gender || '-' }}</mat-icon>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="dateOfBirth">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Date of Birth</th>
+      <td mat-cell *matCellDef="let card">{{ formatDate(card.dateOfBirth) }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef>Email</th>
+      <td mat-cell *matCellDef="let card">
+        <a *ngIf="card.email" [href]="'mailto:' + card.email" [attr.aria-label]="'Email ' + card.email">
+          {{ card.email }}
+        </a>
+        <span *ngIf="!card.email">-</span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="phone">
+      <th mat-header-cell *matHeaderCellDef>Phone</th>
+      <td mat-cell *matCellDef="let card">
+        <a *ngIf="card.phone" [href]="'tel:' + card.phone" [attr.aria-label]="'Call ' + card.phone">
+          {{ card.phone }}
+        </a>
+        <span *ngIf="!card.phone">-</span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="address">
+      <th mat-header-cell *matHeaderCellDef>Address</th>
+      <td mat-cell *matCellDef="let card">{{ card.address || '-' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td mat-cell *matCellDef="let card">
+        <button mat-icon-button [routerLink]="['/cards', card.id.toString()]"
+          [attr.aria-label]="'View details for ' + card.name">
+          <mat-icon>visibility</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" (click)="deleteCard(card)" [attr.aria-label]="'Delete ' + card.name">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns" role="row">
+    </tr>
+  </table>
+
+  <mat-paginator *ngIf="!loading && displayedCards().length > 0" [length]="totalCount" [pageSize]="pageSize()"
+    [pageIndex]="pageIndex()" [pageSizeOptions]="[10, 25, 50, 100]" (page)="onPageChange($event)"
+    aria-label="Select page of business cards">
+  </mat-paginator>
+</div>

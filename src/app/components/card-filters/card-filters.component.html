@@ -11,13 +11,12 @@
       <mat-option [value]="null">All</mat-option>
       <mat-option value="Male">Male</mat-option>
       <mat-option value="Female">Female</mat-option>
-      <mat-option value="Other">Other</mat-option>
     </mat-select>
   </mat-form-field>
 
   <mat-form-field appearance="outline">
     <mat-label>Date of Birth</mat-label>
-    <input matInput [matDatepicker]="picker" formControlName="dateOfBirth" />
+    <input matInput [matDatepicker]="picker" formControlName="dateOfBirth" title="dateOfBirth" />
     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>

@@ -1,15 +1,25 @@
-import { HttpInterceptorFn, HttpRequest, HttpResponse } from '@angular/common/http';
+import {
+  HttpInterceptorFn,
+  HttpRequest,
+  HttpResponse,
+} from '@angular/common/http';
 import { of, delay } from 'rxjs';
 import { environment } from '@env/environment';
 import { MOCK_BUSINESS_CARDS } from '@mocks/mock-data';
-import { BusinessCard, ApiResponse } from '@models/business-card.model';
+import { BusinessCard } from '@models/business-card.model';
+import { ApiResponse } from '@models/responses/api.response';
 
 export const mockHttpInterceptor: HttpInterceptorFn = (req, next) => {
   if (!environment.useMocks) {
     return next(req);
   }
 
-  if (req.method === 'GET' && (req.url.includes('/api/business-cards') || req.url.includes('/api/cards')) && !req.url.includes('/export')) {
+  if (
+    req.method === 'GET' &&
+    (req.url.includes('/api/business-cards') ||
+      req.url.includes('/api/cards')) &&
+    !req.url.includes('/export')
+  ) {
     const url = new URL(req.url, 'http://localhost');
     const params: Record<string, string> = {};
     url.searchParams.forEach((value, key) => {
@@ -29,13 +39,19 @@ export const mockHttpInterceptor: HttpInterceptorFn = (req, next) => {
       );
     }
     if (params['phone']) {
-      filteredCards = filteredCards.filter((c) => c.phone.includes(params['phone']));
+      filteredCards = filteredCards.filter((c) =>
+        c.phone.includes(params['phone'])
+      );
     }
     if (params['gender']) {
-      filteredCards = filteredCards.filter((c) => c.gender === params['gender']);
+      filteredCards = filteredCards.filter(
+        (c) => c.gender === params['gender']
+      );
     }
     if (params['dob']) {
-      filteredCards = filteredCards.filter((c) => c.dateOfBirth === params['dob']);
+      filteredCards = filteredCards.filter(
+        (c) => c.dateOfBirth === params['dob']
+      );
     }
 
     const response: ApiResponse<BusinessCard[]> = {
@@ -51,10 +67,18 @@ export const mockHttpInterceptor: HttpInterceptorFn = (req, next) => {
       timeGenerated: new Date().toISOString(),
     };
 
-    return of(new HttpResponse({ status: 200, body: response })).pipe(delay(300));
+    return of(new HttpResponse({ status: 200, body: response })).pipe(
+      delay(300)
+    );
   }
 
-  if (req.method === 'POST' && (req.url.includes('/api/business-cards') || req.url.includes('/api/cards')) && !req.url.includes('/import') && !req.url.includes('/export')) {
+  if (
+    req.method === 'POST' &&
+    (req.url.includes('/api/business-cards') ||
+      req.url.includes('/api/cards')) &&
+    !req.url.includes('/import') &&
+    !req.url.includes('/export')
+  ) {
     const body = req.body as any;
     const newCard: BusinessCard = {
       id: Date.now(),
@@ -83,10 +107,16 @@ export const mockHttpInterceptor: HttpInterceptorFn = (req, next) => {
       timeGenerated: new Date().toISOString(),
     };
 
-    return of(new HttpResponse({ status: 201, body: response })).pipe(delay(300));
+    return of(new HttpResponse({ status: 201, body: response })).pipe(
+      delay(300)
+    );
   }
 
-  if (req.method === 'DELETE' && (req.url.includes('/api/business-cards/') || req.url.includes('/api/cards/'))) {
+  if (
+    req.method === 'DELETE' &&
+    (req.url.includes('/api/business-cards/') ||
+      req.url.includes('/api/cards/'))
+  ) {
     const idStr = req.url.split('/').pop();
     const id = idStr ? Number(idStr) : null;
     if (id !== null) {
@@ -109,7 +139,9 @@ export const mockHttpInterceptor: HttpInterceptorFn = (req, next) => {
       timeGenerated: new Date().toISOString(),
     };
 
-    return of(new HttpResponse({ status: 200, body: response })).pipe(delay(300));
+    return of(new HttpResponse({ status: 200, body: response })).pipe(
+      delay(300)
+    );
   }
 
   if (req.method === 'POST' && req.url.includes('/api/cards/export')) {
@@ -146,11 +178,14 @@ export const mockHttpInterceptor: HttpInterceptorFn = (req, next) => {
       validRows: 2,
       invalidRows: 0,
     };
-    return of(new HttpResponse({ status: 200, body: mockPreview })).pipe(delay(500));
+    return of(new HttpResponse({ status: 200, body: mockPreview })).pipe(
+      delay(500)
+    );
   }
 
   if (req.method === 'POST' && req.url.includes('/api/cards/import/commit')) {
-    const cards = (req.body as { cards: Array<Omit<BusinessCard, 'id'>> }).cards;
+    const cards = (req.body as { cards: Array<Omit<BusinessCard, 'id'>> })
+      .cards;
     cards.forEach((card) => {
       const newCard: BusinessCard = {
         ...card,
@@ -169,7 +204,7 @@ export const mockHttpInterceptor: HttpInterceptorFn = (req, next) => {
     const newCard: BusinessCard = {
       id: Date.now(),
       name: 'QR Imported Card',
-      gender: 'Other',
+      gender: 'Male',
       dateOfBirth: new Date().toISOString().split('T')[0],
       email: 'qr@example.com',
       phone: '555-000-0000',
@@ -179,10 +214,15 @@ export const mockHttpInterceptor: HttpInterceptorFn = (req, next) => {
       updatedAt: null,
     };
     MOCK_BUSINESS_CARDS.push(newCard);
-    return of(new HttpResponse({ status: 200, body: newCard })).pipe(delay(500));
+    return of(new HttpResponse({ status: 200, body: newCard })).pipe(
+      delay(500)
+    );
   }
 
-  if (req.method === 'POST' && req.url.includes('/api/cards/import/csv/preview')) {
+  if (
+    req.method === 'POST' &&
+    req.url.includes('/api/cards/import/csv/preview')
+  ) {
     const mockPreviewCards = [
       {
         name: 'John Doe',
@@ -212,16 +252,24 @@ export const mockHttpInterceptor: HttpInterceptorFn = (req, next) => {
 
     const response = {
       cards: mockPreviewCards,
-      errors: ['Row 5: Invalid email format', 'Row 7: Missing required field: name'],
+      errors: [
+        'Row 5: Invalid email format',
+        'Row 7: Missing required field: name',
+      ],
       totalRows: 5,
       validRows: 3,
       invalidRows: 2,
     };
 
-    return of(new HttpResponse({ status: 200, body: response })).pipe(delay(800));
+    return of(new HttpResponse({ status: 200, body: response })).pipe(
+      delay(800)
+    );
   }
 
-  if (req.method === 'POST' && req.url.includes('/api/cards/import/csv/commit')) {
+  if (
+    req.method === 'POST' &&
+    req.url.includes('/api/cards/import/csv/commit')
+  ) {
     const body = req.body as { cards: Array<Omit<BusinessCard, 'id'>> };
     const cardsToImport = body.cards || [];
 
@@ -241,7 +289,9 @@ export const mockHttpInterceptor: HttpInterceptorFn = (req, next) => {
       importedCount: cardsToImport.length,
     };
 
-    return of(new HttpResponse({ status: 200, body: response })).pipe(delay(1000));
+    return of(new HttpResponse({ status: 200, body: response })).pipe(
+      delay(1000)
+    );
   }
 
   return next(req);
